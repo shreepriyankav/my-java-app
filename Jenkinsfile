@@ -43,18 +43,13 @@ pipeline {
             }
         }
 
-        stage('Trivy Scan') {
-            steps {
-                sh '''
-                    trivy image \
-                      --scanners vuln \
-                     
-                      --format json \
-                      --output trivy-report.json \
-                      ${IMAGE_NAME}
-                '''
-            }
-        }
+       stage('Trivy Scan') {
+    steps {
+        sh '''
+            trivy image --scanners vuln --format json --output trivy-report.json "${IMAGE_NAME}"
+        '''
+    }
+}
 
         stage('Deploy') {
             steps {
