@@ -48,7 +48,7 @@ pipeline {
                 sh '''
                     trivy image \
                       --scanners vuln \
-                      --skip-java-db-update \
+                     
                       --format json \
                       --output trivy-report.json \
                       ${IMAGE_NAME}
