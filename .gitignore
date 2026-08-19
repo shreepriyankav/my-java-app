@@ -1,3 +1,4 @@
 target/
 *.war
 *.class
+trivy-report.json
