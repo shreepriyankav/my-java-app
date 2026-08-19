@@ -25,7 +25,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube') {
                     sh '''
-                        mvn sonar:sonar \
+                      mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.2.0.4988:sonar \
                           -Dsonar.projectKey=my-java-app \
                           -Dsonar.projectName=my-java-app
                     '''
