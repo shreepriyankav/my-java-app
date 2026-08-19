@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -21,6 +22,18 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh '''
+                        mvn sonar:sonar \
+                          -Dsonar.projectKey=my-java-app \
+                          -Dsonar.projectName=my-java-app
+                    '''
+                }
+            }
+        }
+
         stage('Dependency Check') {
             steps {
                 sh '''
@@ -28,28 +41,33 @@ pipeline {
                     mkdir -p target/dependency-check-report
 
                     /opt/dependency-check-12.1.0/bin/dependency-check.sh \
-              --project "my-java-app" \
-              --scan target/myapp.war \
-              --format XML \
-              --out target/dependency-check-report \
-              --disableOssIndex \
-              --failOnCVSS 11
-        '''
-    }
-}
+                      --project "my-java-app" \
+                      --scan target/myapp.war \
+                      --format XML \
+                      --out target/dependency-check-report \
+                      --disableOssIndex \
+                      --failOnCVSS 11
+                '''
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 sh 'docker build -t ${IMAGE_NAME} .'
             }
         }
 
-       stage('Trivy Scan') {
-    steps {
-        sh '''
-            trivy image --scanners vuln --format json --output trivy-report.json "${IMAGE_NAME}"
-        '''
-    }
-}
+        stage('Trivy Scan') {
+            steps {
+                sh '''
+                    trivy image \
+                      --scanners vuln \
+                      --format json \
+                      --output trivy-report.json \
+                      "${IMAGE_NAME}"
+                '''
+            }
+        }
 
         stage('Deploy') {
             steps {
@@ -92,3 +110,5 @@ pipeline {
         }
     }
 }
+```
+
