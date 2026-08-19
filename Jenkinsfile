@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -32,7 +33,8 @@ pipeline {
                       --scan target/myapp.war \
                       --format XML \
                       --out target/dependency-check-report \
-                      --failOnCVSS 11
+                      --failOnCVSS 11 \
+                      --disableOssIndexUpdate
                 '''
             }
         }
@@ -97,3 +99,5 @@ pipeline {
         }
     }
 }
+```
+
