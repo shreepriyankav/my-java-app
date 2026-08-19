@@ -27,17 +27,16 @@ pipeline {
                     rm -rf target/dependency-check-report
                     mkdir -p target/dependency-check-report
 
-                    dependency-check.sh \
-                      --project "my-java-app" \
-                      --scan target/myapp.war \
-                      --format XML \
-                      --out target/dependency-check-report \
-                      --disableOssIndex \
-                      --failOnCVSS 11
-                '''
-            }
-        }
-
+                    /opt/dependency-check-12.1.0/bin/dependency-check.sh \
+              --project "my-java-app" \
+              --scan target/myapp.war \
+              --format XML \
+              --out target/dependency-check-report \
+              --disableOssIndex \
+              --failOnCVSS 11
+        '''
+    }
+}
         stage('Docker Build') {
             steps {
                 sh 'docker build -t ${IMAGE_NAME} .'
